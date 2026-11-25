@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Grievance Redressal Portal</title>
+    <link rel="stylesheet" href="./style.css?v=feature-update-1">
+    <script src="./script.js?v=feature-update-1" defer></script>
+</head>
+<body>
+
+    <header>
+        <h1>E-Grievance Redressal Portal</h1>
+        <p>Submit your grievance and track its progress.</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#publicHome">Home</a></li>
+            <li><a href="#dashboard">Admin Dashboard</a></li>
+            <li id="submitNavItem"><a href="#submit">Submit Grievance</a></li>
+            <li id="myGrievancesNavItem"><a href="#myGrievances">My Grievances</a></li>
+            <li><a href="#track">Track Grievance</a></li>
+            <li><a href="#manage">Manage Records</a></li>
+            <li><button type="button" id="studentLogoutButton" class="student-logout-button" hidden>Student Logout</button></li>
+        </ul>
+    </nav>
+
+
+
+    <!-- Public-facing welcome area -->
+    <section class="public-hero" id="publicHome">
+        <div class="hero-content">
+            <p class="hero-eyebrow">YOUR VOICE MATTERS</p>
+            <h2>Raise Your Concern.<br><span>We’re Here to Help.</span></h2>
+            <p class="hero-description">Submit a grievance securely, follow its progress, and stay informed at every step.</p>
+            <div class="hero-actions">
+                <a id="submitHeroButton" class="hero-button primary" href="#submit">Submit a Grievance <span aria-hidden="true">→</span></a>
+                <a class="hero-button secondary" href="#track">Track Existing Grievance</a>
+            </div>
+            <div class="hero-trust"><span aria-hidden="true">✓</span> Simple process <span aria-hidden="true">✓</span> Status tracking <span aria-hidden="true">✓</span> Clear updates</div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+            <div class="hero-orbit orbit-one"></div>
+            <div class="hero-orbit orbit-two"></div>
+            <div class="hero-shield"><span>✓</span></div>
+            <div class="hero-art-card"><span class="art-card-icon">✉</span><div><strong>Your concern</strong><small>Matters to us</small></div></div>
+        </div>
+    </section>
+
+    <div class="public-feature-strip" aria-label="How the portal helps">
+        <a id="submitFeatureCard" class="public-feature" href="#submit"><span class="feature-icon">✎</span><span><strong>Submit Grievance</strong><small>Tell us what happened</small></span><span class="feature-arrow">↗</span></a>
+        <a class="public-feature" href="#track"><span class="feature-icon feature-purple">⌕</span><span><strong>Track Progress</strong><small>Check your latest status</small></span><span class="feature-arrow">↗</span></a>
+        <div class="public-feature"><span class="feature-icon feature-green">✓</span><span><strong>Stay Informed</strong><small>Follow your grievance ID</small></span></div>
+    </div>
+
+    <main>
+
+        <!-- Dashboard -->
+        <section id="dashboard">
+            <div class="section-heading"><div><p class="eyebrow">ADMINISTRATION</p><h2>Dashboard Overview</h2><p>Monitor incoming complaints and track resolution progress.</p></div><span class="live-indicator">● Live records</span></div>
+
+            <div class="dashboard-cards">
+                <article class="stat-card total-card">
+                    <div class="stat-icon">▤</div>
+                    <h3>Total Grievances</h3>
+                    <p id="totalCount">0</p>
+                    <span class="stat-caption">All submitted records</span>
+                </article>
+
+                <article class="stat-card pending-card">
+                    <div class="stat-icon">◷</div>
+                    <h3>Pending Grievances</h3>
+                    <p id="pendingCount">0</p>
+                    <span class="stat-caption">Awaiting action</span>
+                </article>
+
+                <article class="stat-card progress-card">
+                    <div class="stat-icon">↻</div>
+                    <h3>In Progress</h3>
+                    <p id="inProgressCount">0</p>
+                    <span class="stat-caption">Currently being handled</span>
+                </article>
+                <article class="stat-card resolved-card">
+                    <div class="stat-icon">✓</div>
+                    <h3>Resolved Grievances</h3>
+                    <p id="resolvedCount">0</p>
+                    <span class="stat-caption">Successfully completed</span>
+                </article>
+            </div>
+
+            <!-- Graphical analytics: generated from the real grievance records -->
+            <div class="analytics-heading">
+                <div>
+                    <p class="eyebrow">VISUAL INSIGHTS</p>
+                    <h3>Grievance Analytics</h3>
+                    <p>Charts update automatically when records are loaded or a status changes.</p>
+                </div>
+                <span class="analytics-note">Based on current records</span>
+            </div>
+
+            <div class="analytics-grid">
+                <article class="chart-card">
+                    <div class="chart-card-heading">
+                        <div><h3>Grievances by Status</h3><p>Current workload distribution</p></div>
+                    </div>
+                    <div class="chart-wrap donut-wrap">
+                        <canvas id="statusChart" role="img" aria-label="Doughnut chart showing pending, in progress, and resolved grievances.">Status chart is unavailable.</canvas>
+                    </div>
+                    <div id="statusLegend" class="chart-legend" aria-live="polite"></div>
+                </article>
+
+                <article class="chart-card">
+                    <div class="chart-card-heading">
+                        <div><h3>By Category</h3><p>Number of grievances in each category</p></div>
+                    </div>
+                    <div class="chart-wrap bar-wrap">
+                        <canvas id="categoryChart" role="img" aria-label="Bar chart showing grievance counts by category.">Category chart is unavailable.</canvas>
+                    </div>
+                </article>
+
+                <article class="chart-card chart-card-wide">
+                    <div class="chart-card-heading">
+                        <div><h3>Submission Trend</h3><p>Grievances submitted over the last 7 days</p></div>
+                    </div>
+                    <div class="chart-wrap trend-wrap">
+                        <canvas id="trendChart" role="img" aria-label="Line chart showing daily grievance submissions over the last seven days.">Submission trend chart is unavailable.</canvas>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Submit Grievance -->
+        <section id="submit" class="public-section submit-section">
+            <p class="eyebrow">WE’RE LISTENING</p><h2>Submit a Grievance</h2>
+            <p class="section-intro">Share the details below. Fields marked as required must be completed so your concern can be reviewed.</p>
+
+            <form id="grievanceForm">
+                <label for="name">Full Name:</label>
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    placeholder="Enter your full name"
+                    required
+                >
+
+                <label for="email">Email Address:</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Enter your email"
+                    required
+                >
+
+                <label for="category">Grievance Category:</label>
+                <select id="category" name="category" required>
+                    <option value="">Select a category</option>
+                    <option value="Academic">Academic</option>
+                    <option value="Administration">Administration</option>
+                    <option value="Fees">Fees and Payments</option>
+                    <option value="Technical">Technical</option>
+                    <option value="Other">Other</option>
+                </select>
+
+                <label for="subject">Subject:</label>
+                <input
+                    type="text"
+                    id="subject"
+                    name="subject"
+                    placeholder="Enter complaint subject"
+                    required
+                >
+
+                <label for="description">Complaint Description:</label>
+                <textarea
+                    id="description"
+                    name="description"
+                    rows="5"
+                    placeholder="Describe your grievance in detail"
+                    required
+                ></textarea>
+
+                <label for="attachment">Supporting Document (optional):</label>
+                <input type="file" id="attachment" name="attachment" accept=".pdf,.png,.jpg,.jpeg,.doc,.docx,.txt">
+                <p class="form-help">Attach a fee receipt, photo, or supporting document. Maximum size: 5 MB. Allowed: PDF, PNG, JPG, DOC, DOCX, TXT.</p>
+
+                <button type="submit" class="primary-button">Submit Grievance</button>
+                <p class="form-help">After submission, you can download a PDF receipt for your records.</p>
+            </form>
+
+            <p id="formMessage" class="message" aria-live="polite"></p>
+        </section>
+
+        <!-- Student's personal grievance list -->
+        <section id="myGrievances" class="public-section" hidden>
+            <p class="eyebrow">YOUR SUBMISSIONS</p><h2>My Grievances</h2>
+            <p class="section-intro">All grievances submitted from your student account appear here.</p>
+            <div id="myGrievancesList" class="my-grievances-list" aria-live="polite"><p>Loading your grievances...</p></div>
+        </section>
+
+        <!-- Track Grievance -->
+        <section id="track" class="public-section track-section">
+            <p class="eyebrow">STAY UP TO DATE</p><h2>Track Your Grievance</h2>
+            <p class="section-intro">Enter the grievance ID you received after submitting your complaint to see its current status.</p>
+
+            <form id="trackingForm">
+                <label for="grievanceId">Grievance ID:</label>
+                <input
+                    type="text"
+                    id="grievanceId"
+                    name="grievanceId"
+                    placeholder="Example: GRV-123456789"
+                    required
+                >
+
+                <button type="submit">Track Grievance</button>
+            </form>
+
+            <div id="trackingResult" aria-live="polite">
+                <p>Your grievance status will appear here.</p>
+            </div>
+        </section>
+
+        <!-- Manage Grievances -->
+        <section id="manage">
+            <div class="section-heading"><div><p class="eyebrow">RECORD MANAGEMENT</p><h2>Manage Grievances</h2><p>Search, filter, and update submitted records.</p></div></div>
+
+            <div class="filter-controls">
+                <div>
+                    <label for="search">Search by ID or Name:</label>
+                    <input
+                        type="search"
+                        id="search"
+                        placeholder="Search ID, name, email, or subject"
+                    >
+                </div>
+
+                <div>
+                    <label for="filterCategory">Filter by Category:</label>
+                    <select id="filterCategory">
+                        <option value="">All Categories</option>
+                        <option value="Academic">Academic</option>
+                        <option value="Administration">Administration</option>
+                        <option value="Fees">Fees and Payments</option>
+                        <option value="Technical">Technical</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="filterStatus">Filter by Status:</label>
+                    <select id="filterStatus">
+                        <option value="">All Statuses</option>
+                        <option value="Pending">Pending</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Resolved">Resolved</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Grievance ID</th>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Subject</th>
+                            <th>Status</th>
+                            <th>Attachment</th>
+                            <th>Update Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="grievanceTable"></tbody>
+                </table>
+            </div>
+
+            <p id="tableMessage" class="message" aria-live="polite">
+                No grievances have been submitted yet.
+            </p>
+        </section>
+        
+<!-- Administrator Login -->
+<section id="admin" hidden>
+    <p class="eyebrow">SECURE ACCESS</p><h2>Administrator Login</h2>
+    <p>Sign in to manage grievance records.</p>
+
+    <form id="adminLoginForm">
+        <label for="adminUsername">Username:</label>
+        <input
+            type="text"
+            id="adminUsername"
+            name="username"
+            placeholder="Enter administrator username"
+            autocomplete="username"
+            required
+        >
+
+        <label for="adminPassword">Password:</label>
+        <input
+            type="password"
+            id="adminPassword"
+            name="password"
+            placeholder="Enter administrator password"
+            autocomplete="current-password"
+            required
+        >
+
+        <button type="submit">Login</button>
+    </form>
+
+    <p id="adminMessage" class="message" aria-live="polite"></p>
+
+    <button id="adminLogout" type="button" hidden>
+        Logout
+    </button>
+</section>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2026 E-Grievance Redressal Portal</p>
+        <p>Designed to simplify grievance management.</p>
+    </footer>
+
+</body>
+</html>
